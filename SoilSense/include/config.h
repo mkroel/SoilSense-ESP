@@ -23,9 +23,12 @@
 #define PUMP_COOLDOWN           (20 * 1000)     // 30s Pause nach Pumpenende
 
 // Threshholds
-// Kalibriert: Luft ≈ 2508 mV, Wasserglas ≈ 932 mV
-#define THRESHOLD_DRY           2600   // ab hier 0 %
-#define THRESHOLD_WET            900   // ab hier 100 %
+// Erde-kalibriert (nicht Wasserglas-Extreme):
+//   trockene Erde ~ 2400 mV → 0 %
+//   nasse Erde    ~ 1300 mV → ~100 %
+// In-soil readings ohne reines Wasser sind realistischer als Luft/Glas-Extreme.
+#define THRESHOLD_DRY           2400   // ab hier 0 %
+#define THRESHOLD_WET           1300   // ab hier 100 %
 #define PUMP_OFFSET_CORRECTION  +20    // Pumpe drückt Messung ~20mV nach unten → addieren
 
 #define MOISTURE_THRESHOLD_DRY      25 // Prozent
