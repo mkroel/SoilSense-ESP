@@ -65,7 +65,7 @@ static String build_thing_model()
     JsonObject measure = caps.add<JsonObject>();
     measure["id"]        = "measure";
     measure["type"]      = "IMPULSE";
-    measure["direction"] = "writable";
+    measure["direction"] = "writeable";
     measure["label"]     = "Messen";
 
     String out;
@@ -92,16 +92,14 @@ static void mqtt_connect()
 {
     if (mqtt_client.connected()) return;
 
-    String client_id = "soilsense-" + mac;
-
     bool ok = mqtt_client.connect(
-        client_id.c_str(),
+        mac.c_str(),
         s_mqtt_user,
         s_mqtt_pass,
-        topic_status.c_str(),   // Last-Will Topic
-        1,                       // QoS
-        true,                    // retained
-        "offline"
+        topic_status.c_str(),        // Last-Will Topic
+        0,                            // QoS
+        true,                         // retained
+        "{\"status\":\"offline\"}"   // LWT payload — JSON object
     );
 
     if (!ok) {
@@ -112,13 +110,14 @@ static void mqtt_connect()
 
     Serial.println("[hub] MQTT connected");
 
-    // Status online setzen
-    mqtt_client.publish(topic_status.c_str(), "online", true);
-
-    // Gerät registrieren
+    // Erst registrieren, dann online — Backend kennt Gerät sonst noch nicht
     String tm = build_thing_model();
     mqtt_client.publish("devices/register", tm.c_str(), false);
     Serial.println("[hub] Thing model published");
+
+    // Status online setzen
+    bool pub_ok = mqtt_client.publish(topic_status.c_str(), "{\"status\":\"online\"}", true);
+    Serial.printf("[hub] Status online publish: %s\n", pub_ok ? "ok" : "FAILED");
 
     // Command-Topic subscriben
     mqtt_client.subscribe(topic_command.c_str());
@@ -166,7 +165,7 @@ void connect_hub_begin(const char *ssid,      const char *password,
 
     mqtt_client.setServer(mqtt_host, mqtt_port);
     mqtt_client.setCallback(on_mqtt_message);
-    mqtt_client.setKeepAlive(30);
+    mqtt_client.setKeepAlive(15);  // 15s → Broker detektiert Disconnect nach ~22s
     mqtt_client.setBufferSize(1024);  // Thing-Model kann groß werden
 
     mqtt_connect();
