@@ -1,6 +1,7 @@
 #include "soilsense.h"
 #include "config.h"
 #include <Arduino.h>
+#include <stdio.h>
 
 // vars
 static uint16_t moisture_raw = 0;
@@ -23,7 +24,12 @@ void soil_sense_update(bool pump_state)
         sum2 += analogReadMilliVolts(SENSOR2_AOUT_PIN);
     }
 
-    moisture_raw = (sum1 + sum2) / (2 * MEASUREMENT_SAMPLES);
+    uint16_t avg1 = sum1 / MEASUREMENT_SAMPLES;
+    uint16_t avg2 = sum2 / MEASUREMENT_SAMPLES;
+    moisture_raw = (avg1 + avg2) / 2;
+
+    printf("[sense] S1=%u mV  S2=%u mV  avg=%u mV  pump=%d\n",
+                  avg1, avg2, moisture_raw, pump_state);
 
     if (pump_state) {
         int32_t corrected = (int32_t)moisture_raw + PUMP_OFFSET_CORRECTION;
@@ -38,6 +44,9 @@ void soil_sense_update(bool pump_state)
         int32_t value = moisture_raw - THRESHOLD_DRY;
         moisture_percent = (uint8_t)((value * 100) / range);
     }
+
+    printf("[sense] raw=%u → %u%% (%s)\n",
+                  moisture_raw, moisture_percent, soil_sense_get_moisture_status());
 }
 
 uint16_t soil_sense_get_raw_value(void) {

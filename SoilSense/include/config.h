@@ -10,21 +10,23 @@
 #define LED_PIN            2
 
 // Logik-Defines
-#define FLOAT_FULL        HIGH    // Schwimmer oben = HIGH
-#define PUMP_ON_LEVEL     LOW
+#define FLOAT_FULL        LOW    // Schwimmer oben
+#define PUMP_ON_LEVEL     LOW    // active-LOW Relais
 #define PUMP_OFF_LEVEL    HIGH
 
 // Timer & Intervalle
-#define MEASURE_INTERVAL_SLEEP   (3UL * 60 * 60 * 1000) // 3 Stunden
-#define MEASURE_INTERVAL_ACTIVE  (3 * 1000)        // 5 Sekunden
+#define MEASURE_INTERVAL_SLEEP   (3UL * 60 * 60 * 1000)  // 3 Stunden Idle
+#define MEASURE_INTERVAL_ACTIVE  (20 * 1000)              // 20s Aufweckfenster
+#define ACTIVE_WINDOW            (90 * 1000)              // 90s aktives Messfenster nach Wake
 
 #define PUMP_MAX_RUNTIME        (5 * 1000)      // Aus nach 5s
 #define PUMP_COOLDOWN           (20 * 1000)     // 30s Pause nach Pumpenende
 
 // Threshholds
-#define THRESHOLD_DRY           3200
-#define THRESHOLD_WET           1300
-#define PUMP_OFFSET_CORRECTION  -85 // Abweichung durch Pumpenlast
+// Kalibriert: Luft ≈ 2508 mV, Wasserglas ≈ 932 mV
+#define THRESHOLD_DRY           2600   // ab hier 0 %
+#define THRESHOLD_WET            900   // ab hier 100 %
+#define PUMP_OFFSET_CORRECTION  +20    // Pumpe drückt Messung ~20mV nach unten → addieren
 
 #define MOISTURE_THRESHOLD_DRY      25 // Prozent
 #define MOISTURE_THRESHOLD_OPTIMAL  40
