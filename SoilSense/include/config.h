@@ -10,8 +10,9 @@
 #define LED_PIN            2
 
 // Logik-Defines
-#define FLOAT_FULL        HIGH    // Schwimmer oben = HIGH (oder LOW, je nach Verdrahtung)
-#define PUMP_ON_LEVEL     LOW     // dein Relais war active-low (GPIO_PIN_RESET = AN)
+#define FLOAT_FULL        HIGH    // Schwimmer oben = HIGH
+#define PUMP_ON_LEVEL     LOW
+#define PUMP_OFF_LEVEL    HIGH
 
 // Timer & Intervalle
 #define MEASURE_INTERVAL_SLEEP   (3UL * 60 * 60 * 1000) // 3 Stunden
@@ -23,7 +24,7 @@
 // Threshholds
 #define THRESHOLD_DRY           3200
 #define THRESHOLD_WET           1300
-#define PUMP_OFFSET_CORRECTION  -85 // Abweichung durch Pumpenlast (111 bei Ventilator, -85 bei der Pumpe mit 3,3V Versorgung, -450 bei 5V)
+#define PUMP_OFFSET_CORRECTION  -85 // Abweichung durch Pumpenlast
 
 #define MOISTURE_THRESHOLD_DRY      25 // Prozent
 #define MOISTURE_THRESHOLD_OPTIMAL  40
@@ -33,6 +34,3 @@
 // Messungen
 #define MEASUREMENT_SAMPLES     64
 #define TANK_EMPTY_COUNTER_MAX  60 // Anzahl Messungen mit leerem Tank bis Idle
-
-// Hardwareadressen
-#define LCD_ADDR       (0x4E) //LCD Displays
