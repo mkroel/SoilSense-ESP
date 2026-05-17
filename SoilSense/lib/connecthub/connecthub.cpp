@@ -110,7 +110,6 @@ static void mqtt_connect()
 
     Serial.println("[hub] MQTT connected");
 
-    // Erst registrieren, dann online — Backend kennt Gerät sonst noch nicht
     String tm = build_thing_model();
     mqtt_client.publish("devices/register", tm.c_str(), false);
     Serial.println("[hub] Thing model published");
