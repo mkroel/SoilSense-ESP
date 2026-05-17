@@ -2,13 +2,13 @@
 #include "config.h"
 #include <Arduino.h>
 
-void visualize_Init(void)
+void visualize_init(void)
 {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
 }
 
-void visualize_Update(int status)
+void visualize_update(int status)
 {
     unsigned long now = millis();
     bool ledOn = false;

@@ -4,8 +4,8 @@
 extern "C" {
 #endif
 
-void visualize_Init(void);
-void visualize_Update(int status);   // 0=ok, 1=pump, 2=tank empty
+void visualize_init(void);
+void visualize_update(int status);   // 0=ok, 1=pump, 2=tank empty
 
 #ifdef __cplusplus
 }
