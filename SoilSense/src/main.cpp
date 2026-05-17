@@ -11,7 +11,7 @@ void setup() {
 }
 
 void loop() {
-  for (int i = 0; i <= 2; i++) {
+  for (int i = 0; i <= 4; i++) {
     Serial.printf("status = %d\n", i);
     unsigned long start = millis();
     while (millis() - start < 1000 * 30) {

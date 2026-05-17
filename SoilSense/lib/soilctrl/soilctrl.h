@@ -17,13 +17,13 @@ typedef enum {
 extern "C" {
 #endif
 
-void SoilCtrl_Init(void);
-void SoilCtrl_Update(void);
-void SoilCtrl_SetPump(bool turnOn);
-void SoilCtrl_ImmediateStop(void);
-bool SoilCtrl_IsPumpOn(void);
-bool SoilCtrl_IsTankEmpty(void);
-int  SoilCtrl_getStatus(void);
+void soil_ctrl_init(void);
+void soil_ctrl_update(void);
+void soil_ctrl_set_pump(bool turn_on);
+void soil_ctrl_immediate_stop(void);
+bool soil_ctrl_is_pump_on(void);
+bool soil_ctrl_is_tank_empty(void);
+int  soil_ctrl_get_status(void);
 
 #ifdef __cplusplus
 }

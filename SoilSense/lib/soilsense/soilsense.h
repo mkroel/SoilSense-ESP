@@ -7,15 +7,15 @@
 extern "C" {
 #endif
 
-void SoilSense_Init(void);
-void SoilSense_Update(bool pumpState);
+void soil_sense_init(void);
+void soil_sense_update(bool pump_state);
 
-uint16_t SoilSense_GetRawValue(void);
-uint8_t SoilSense_GetMoisturePercent(void);
-const char* SoilSense_GetMoistureStatus(void);
+uint16_t soil_sense_get_raw_value(void);
+uint8_t  soil_sense_get_moisture_percent(void);
+const char* soil_sense_get_moisture_status(void);
 
-void SoilSense_PowerOn(void);
-void SoilSense_PowerOff(void);
+void soil_sense_power_on(void);
+void soil_sense_power_off(void);
 
 #ifdef __cplusplus
 }
