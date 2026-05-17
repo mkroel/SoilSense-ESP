@@ -65,7 +65,7 @@ static String build_thing_model()
     JsonObject measure = caps.add<JsonObject>();
     measure["id"]        = "measure";
     measure["type"]      = "IMPULSE";
-    measure["direction"] = "writable";
+    measure["direction"] = "writeable";
     measure["label"]     = "Messen";
 
     String out;
@@ -101,7 +101,7 @@ static void mqtt_connect()
         topic_status.c_str(),   // Last-Will Topic
         1,                       // QoS
         true,                    // retained
-        "offline"
+        "\"offline\""           // JSON-encoded string (backend parses all payloads as JSON)
     );
 
     if (!ok) {
@@ -113,7 +113,7 @@ static void mqtt_connect()
     Serial.println("[hub] MQTT connected");
 
     // Status online setzen
-    mqtt_client.publish(topic_status.c_str(), "online", true);
+    mqtt_client.publish(topic_status.c_str(), "\"online\"", true);
 
     // Gerät registrieren
     String tm = build_thing_model();
