@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include "config.h"
+#include "secrets.h"
 #include "soilctrl.h"
 #include "soilsense.h"
+#include "connecthub.h"
 #include "visualize.h"
 #include <esp_task_wdt.h>
 
@@ -9,6 +11,11 @@ static uint32_t last_measurement = 0;
 static uint32_t measurement_interval = MEASURE_INTERVAL_ACTIVE;
 static uint8_t tank_empty_counter = 0;
 static bool is_watering = false;
+static bool force_measurement = false;
+
+void on_measure_triggered() {
+  force_measurement = true;
+}
 
 void setup() {
   esp_task_wdt_init(10, true);
@@ -18,16 +25,26 @@ void setup() {
   soil_sense_init();
   soil_ctrl_init();
   Serial.println("SoilSense ESP32 boot");
+
+  // Connect hub
+  connect_hub_begin(
+    WIFI_SSID, WIFI_PASSWORD,
+    MQTT_HOST, MQTT_PORT,
+    MQTT_USER, MQTT_PASSWORD,
+    on_measure_triggered
+  );
 }
 
 void loop() {
+  connect_hub_loop();
   soil_ctrl_update();
 
-  if (millis() - last_measurement >= measurement_interval) {
+  if (millis() - last_measurement >= measurement_interval || force_measurement) {
     soil_sense_power_on();
     delay(50);
     soil_sense_update(soil_ctrl_is_pump_on());
     soil_sense_power_off();
+    force_measurement = false;
 
     uint8_t moisture = soil_sense_get_moisture_percent();
     if (moisture <= MOISTURE_THRESHOLD_OPTIMAL) is_watering = true;
@@ -53,7 +70,9 @@ void loop() {
     last_measurement = millis();
   }
 
-  visualize_update(soil_ctrl_get_status());
+  uint8_t status = soil_ctrl_get_status();
+  if (!connect_hub_is_connected()) status = 3;
+  visualize_update(status);
   esp_task_wdt_reset();
   delay(100);
 }
