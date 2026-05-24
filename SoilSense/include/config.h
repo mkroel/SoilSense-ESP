@@ -19,22 +19,22 @@
 #define MEASURE_INTERVAL_ACTIVE  (20 * 1000)              // 20s Aufweckfenster
 #define ACTIVE_WINDOW            (90 * 1000)              // 90s aktives Messfenster nach Wake
 
-#define PUMP_MAX_RUNTIME        (5 * 1000)      // Aus nach 5s
-#define PUMP_COOLDOWN           (20 * 1000)     // 30s Pause nach Pumpenende
+#define PUMP_MAX_RUNTIME        (10 * 1000)     // Aus nach 10s
+#define PUMP_COOLDOWN           (30 * 1000)     // 30s Pause
 
 // Threshholds
-// Erde-kalibriert (nicht Wasserglas-Extreme):
-//   trockene Erde ~ 2400 mV → 0 %
-//   nasse Erde    ~ 1300 mV → ~100 %
-// In-soil readings ohne reines Wasser sind realistischer als Luft/Glas-Extreme.
-#define THRESHOLD_DRY           2400   // ab hier 0 %
-#define THRESHOLD_WET           1300   // ab hier 100 %
+// Kalibriert auf reale Messung im Basilikum-Topf:
+//   Luft / abgetrocknet   ≈ 2500 mV → 0 %
+//   geflutet (läuft raus) ≈  950 mV → 100 %
+#define THRESHOLD_DRY           2500   // ab hier 0 %
+#define THRESHOLD_WET            950   // ab hier 100 %
 #define PUMP_OFFSET_CORRECTION  +20    // Pumpe drückt Messung ~20mV nach unten → addieren
 
-#define MOISTURE_THRESHOLD_DRY      25 // Prozent
-#define MOISTURE_THRESHOLD_OPTIMAL  40
-#define MOISTURE_THRESHOLD_STOP     60 // Pumpe stoppt erst bei 60%
-#define MOISTURE_THRESHOLD_WET      75
+// Basilikum: feuchtigkeitsliebend, lässt früh die Blätter hängen
+#define MOISTURE_THRESHOLD_DRY      40 // Warnung "trocken"
+#define MOISTURE_THRESHOLD_OPTIMAL  55 // ab hier Bewässerung starten (war 40)
+#define MOISTURE_THRESHOLD_STOP     70 // bis hier bewässern (war 60)
+#define MOISTURE_THRESHOLD_WET      85
 
 // Messungen
 #define MEASUREMENT_SAMPLES     64
