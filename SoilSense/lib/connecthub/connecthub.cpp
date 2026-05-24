@@ -22,11 +22,6 @@ static const char *s_mqtt_pass;
 
 static uint32_t last_reconnect_attempt = 0;
 
-// Delta-Tracking — 255/-1 = noch nie gesendet
-static uint8_t last_moisture  = 255;
-static int8_t  last_pump_on   = -1;
-static int8_t  last_tank_full = -1;
-
 static String build_thing_model()
 {
     JsonDocument doc;
@@ -121,11 +116,6 @@ static void mqtt_connect()
     // Command-Topic subscriben
     mqtt_client.subscribe(topic_command.c_str());
     Serial.printf("[hub] Subscribed to %s\n", topic_command.c_str());
-
-    // Delta-Cache zurücksetzen → nächstes Telemetry-Publish sendet alles
-    last_moisture  = 255;
-    last_pump_on   = -1;
-    last_tank_full = -1;
 }
 
 void connect_hub_begin(const char *ssid,      const char *password,
@@ -195,21 +185,9 @@ void connect_hub_publish_telemetry(uint8_t moisture, bool pump_on, bool tank_ful
 
     JsonDocument doc;
     JsonObject data = doc["data"].to<JsonObject>();
-
-    if (moisture != last_moisture) {
-        data["moisture"]   = moisture;
-        last_moisture      = moisture;
-    }
-    if ((int8_t)pump_on != last_pump_on) {
-        data["pump"]       = pump_on ? "ON" : "OFF";
-        last_pump_on       = (int8_t)pump_on;
-    }
-    if ((int8_t)tank_full != last_tank_full) {
-        data["tank_status"] = tank_full ? "ON" : "OFF";
-        last_tank_full      = (int8_t)tank_full;
-    }
-
-    if (data.size() == 0) return;  // nichts geändert
+    data["moisture"]    = moisture;
+    data["pump"]        = pump_on   ? "ON" : "OFF";
+    data["tank_status"] = tank_full ? "ON" : "OFF";
 
     String out;
     serializeJson(doc, out);
