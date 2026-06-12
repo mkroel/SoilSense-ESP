@@ -19,21 +19,21 @@ void on_measure_triggered() {
 }
 
 void setup() {
-  esp_task_wdt_init(10, true);
-  esp_task_wdt_add(NULL); 
   Serial.begin(115200);
   visualize_init();
   soil_sense_init();
   soil_ctrl_init();
   Serial.println("SoilSense ESP32 boot");
 
-  // Connect hub
   connect_hub_begin(
     WIFI_SSID, WIFI_PASSWORD,
     MQTT_HOST, MQTT_PORT,
     MQTT_USER, MQTT_PASSWORD,
     on_measure_triggered
   );
+
+  esp_task_wdt_init(10, true);
+  esp_task_wdt_add(NULL);
 }
 
 void loop() {

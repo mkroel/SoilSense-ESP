@@ -31,8 +31,8 @@
 #define PUMP_OFFSET_CORRECTION  +20    // Pumpe drückt Messung ~20mV nach unten → addieren
 
 // Basilikum: feuchtigkeitsliebend, lässt früh die Blätter hängen
-#define MOISTURE_THRESHOLD_DRY      40 // Warnung "trocken"
-#define MOISTURE_THRESHOLD_OPTIMAL  55 // ab hier Bewässerung starten (war 40)
+#define MOISTURE_THRESHOLD_DRY      35 // Warnung "trocken"
+#define MOISTURE_THRESHOLD_OPTIMAL  50 // ab hier Bewässerung starten (war 40)
 #define MOISTURE_THRESHOLD_STOP     70 // bis hier bewässern (war 60)
 #define MOISTURE_THRESHOLD_WET      85
 
