@@ -171,6 +171,10 @@ void mqtt_init() {
   // Default-Socket-Timeout ist 15s — bei totem Broker wuerde ein einzelner
   // connect()-Versuch so lange blockieren. 5s reicht und bleibt loop-tauglich.
   mqttClient.setSocketTimeout(5);
+  // WICHTIG: Default-Puffer ist nur 256 Bytes. Der Register-Payload
+  // (thing_model + ble + capabilities + state) ist ~1 KB — PubSubClient
+  // verwirft groessere publish() sonst stillschweigend → keine Registrierung.
+  mqttClient.setBufferSize(2048);
   Serial.println("MQTT initialized");
 }
 
